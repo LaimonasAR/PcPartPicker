@@ -13,3 +13,18 @@ my_db = Mongo(
 def find_part(query: dict) -> list:
     found = my_db.find_parts(query=query)
     return found
+
+
+def create_task(task: dict) -> str:
+    creation = my_db.create_part(task)
+    return creation
+
+
+def update_task(query: dict, update: dict) -> str:
+    updated = my_db.update_part(query=query, update=update)
+    return updated
+
+
+def delete_task(query: dict) -> str:
+    deleted = my_db.delete_part(query=query)
+    return deleted

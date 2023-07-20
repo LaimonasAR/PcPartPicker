@@ -32,7 +32,7 @@ class PcParts:
 
 
 class Part(PcParts):
-    def __init__(self, part_type, name, **kwargs):
+    def __init__(self, part_type: str, name: str, **kwargs):
         super().__init__(part_type)
         self.name = name
         self.kwargs = kwargs
@@ -48,6 +48,14 @@ class Part(PcParts):
             prop = self.kwargs.get("property")
             for part in results:
                 print(f"CPU {part['name']},  {part[prop]} {prop}")
+
+    def get_all_properties(self):
+        results = list(self.get_data())
+        result = results[0]
+        props = []
+        for key, value in result.items():
+            props.append(key)
+        print(props)
 
 
 # class CpuCooler(PcParts):
@@ -66,3 +74,4 @@ cpu_list = Part(part_type="CPU", name="AMD", property="cores")
 
 cpu_list.get_all_parts()
 cpu_list.get_property()
+cpu_list.get_all_properties()
