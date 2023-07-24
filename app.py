@@ -15,16 +15,16 @@ def find_part(query: dict) -> list:
     return found
 
 
-def create_task(task: dict) -> str:
+def create_part(task: dict) -> str:
     creation = my_db.create_part(task)
     return creation
 
 
-def update_task(query: dict, update: dict) -> str:
+def update_part(query: dict, update: dict) -> str:
     updated = my_db.update_part(query=query, update=update)
     return updated
 
 
-def delete_task(query: dict) -> str:
+def delete_part(query: dict) -> str:
     deleted = my_db.delete_part(query=query)
     return deleted
