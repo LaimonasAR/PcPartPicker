@@ -16,6 +16,14 @@ Use  List, Dict comprehentions to get parsed data."""
 
 import app
 from typing import List, Dict, Any
+import logging
+import logging.config
+
+logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
+logger = logging.getLogger("sLogger")
+# logger.debug("This is a debug message")
+
+# logger.warning("Zero was entered instead of X or O")  # example, remmove this
 
 
 class PcParts:
@@ -44,13 +52,14 @@ class Part(PcParts):
     def get_all_parts(self):
         results = self.get_all()
         for part in results:
+            logger.info("All parts found")
             return f"{part['part_type']} {part}"
 
     def get_property(self):
         if "property" in self.kwargs:
             results = self.get_data()
             prop = self.kwargs.get("property")
-            for part in results:
+            for part in results:  # bad, fix this shit
                 return f"{part['part_type']} {part['name']}, {part[prop]} {prop}"
 
     def get_all_properties(self):
@@ -61,6 +70,7 @@ class Part(PcParts):
             if key != "_id":
                 props.append(key)
         # print(props)
+        logger.info("Part properties found")
         return props
 
 
