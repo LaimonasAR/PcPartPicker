@@ -14,10 +14,12 @@ Create functions that would update current datasets (database).
 Add functions that would parse durrent datasets(database) by specific parameters (CPU name = 'AMD') 
 Use  List, Dict comprehentions to get parsed data."""
 
+
 import app
 from typing import List, Dict, Any
 import logging
 import logging.config
+from pymongo.errors import OperationFailure
 
 logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger("sLogger")
@@ -35,12 +37,19 @@ class PcParts:
         results = app.find_part(query={})
         return results
 
-    def get_data(self):
-        results = app.find_part(query={"part_type": self.part_type})
+    def get_data(self, **kwargs):
+        results = app.find_part(query={"part_type": self.part_type, **kwargs})
         return results
 
     def add_part(self):
         results = app.create_part({"part_type": self.part_type, **self.kwargs})
+        return results
+
+    def update_part(self, **kwargs):
+        results = app.update_part(
+            query={"part_type": self.part_type, **self.kwargs},
+            update={**kwargs},
+        )
         return results
 
 
@@ -73,6 +82,15 @@ class Part(PcParts):
         logger.info("Part properties found")
         return props
 
+    def update_part(self, **kwargs):
+        return super().update_part(**kwargs)
+
+    def get_part(self):
+        results = self.get_data(**self.kwargs)
+        return results
+
+    def add_part(self):
+        return super().add_part()
 
 # class CpuCooler(PcParts):
 #     def __init__(self, name, **kwargs):
@@ -83,15 +101,3 @@ class Part(PcParts):
 #         results = self.get_data()
 #         for parts in results:
 #             print(f"CPU Cooler {parts}")
-
-
-# --------------launch-------------
-cpu_list = Part(part_type="CPU", name="AMD", property="cores")
-
-cpu_list.get_all_parts()
-cpu_list.get_property()
-cpu_list.get_all_properties()
-
-moth_list = Part(part_type="Motherboard", name="Quiet", property="price")
-moth_list.get_property()
-moth_list.get_all_properties()
